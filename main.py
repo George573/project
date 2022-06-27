@@ -12,9 +12,9 @@ for i in range (0, len(strings)):
 with open("position.txt") as position:
     i = int(position.read().strip())
 
-with open("position.txt", "w") as position:
-    while 1:
-        print(strings[i % 100])
-        i += 1
+while 1:
+    print(strings[i % 100])
+    i += 1
+    with open("position.txt", "w") as position:
         position.write(str(i))
-        time.sleep(1)
+    time.sleep(1)

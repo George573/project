@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 from ctypes import sizeof
-from operator import pos
 import time
 
 with open("queries.txt") as req:
@@ -10,8 +9,8 @@ with open("queries.txt") as req:
         strings[i] = strings[i].replace("\n", '')
 
 
-    with open("position.txt") as pos:
-        i = int(pos.read().strip())
+    with open("position.txt") as position:
+        i = int(position.read().strip())
 
     with open("position.txt", "w") as position:
         while 1:

@@ -6,9 +6,9 @@ with open("queries.txt") as req:
     strings = [line.rstrip() for line in req]
 
 clean_strings = []
-for i in range (0, len(strings)):
-    if len(strings[i]) != 0:
-        clean_strings.append(strings[i])
+for line in strings:
+    if line.strip():
+        clean_strings.append(line)
 
 with open("position.txt") as position:
     i = int(position.read().strip())

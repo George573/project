@@ -1,19 +1,21 @@
+from contextlib import contextmanager
+from ctypes import sizeof
 from operator import pos
 import time
 
-req = open("queries.txt", "r")
-strings = req.readlines()
+with open("queries.txt") as req:
+    strings = req.readlines()
 
-position = open("position.txt", "r")
-i = int(position.read().strip())
-position.close()
-position = open("position.txt", "w")
+    for i in range (0, len(strings)):
+        strings[i] = strings[i].replace("\n", '')
 
-while 1:
-    print(strings[i % 100])
-    i += 1
-    position.write(str(i))
-    time.sleep(1)
 
-req.close()
-position.close()
+    with open("position.txt") as pos:
+        i = int(pos.read().strip())
+
+    with open("position.txt", "w") as position:
+        while 1:
+            print(strings[i % 100])
+            i += 1
+            position.write(str(i))
+            time.sleep(1)

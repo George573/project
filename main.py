@@ -10,7 +10,7 @@ position.close()
 position = open("position.txt", "w")
 
 while 1:
-    print(strings[i%100])
+    print(strings[i % 100])
     i += 1
     position.write(str(i))
     time.sleep(1)

@@ -10,13 +10,6 @@ for i in range (0, len(strings)):
     if len(strings[i]) != 0:
         clean_strings.append(strings[i])
 
-"""leng = len(strings)
-for i in range (0, leng):
-    if len(strings[i]) == 0:
-        strings.pop(i)
-        leng -= 1
-        i -= 1"""
-
 with open("position.txt") as position:
     i = int(position.read().strip())
 

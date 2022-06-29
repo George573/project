@@ -19,8 +19,8 @@ def main() -> int:
     while True:
         print(clean_strings[i % len(clean_strings)])
         i += 1
-        with open("position.txt", "w") as position:
-            position.write(str(i))
+        with open("position.txt", "w") as file:
+            file.write(str(i))
         time.sleep(1)
     return 0
 

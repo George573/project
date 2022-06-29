@@ -1,21 +1,28 @@
-from contextlib import contextmanager
-from ctypes import sizeof
+import sys
 import time
 
-with open("queries.txt") as req:
-    strings = [line.rstrip() for line in req]
+def main() -> int:
+    with open("queries.txt") as file:
+        strings = [line.rstrip() for line in file]
 
-clean_strings = []
-for line in strings:
-    if line.strip():
-        clean_strings.append(line)
+    clean_strings = []
+    for line in strings:
+        if line.strip():
+            clean_strings.append(line)
+    
+    try:
+        with open("position.txt") as file:
+            i = int(file.read().strip())
+    except:
+        i = 1
+    
+    while True:
+        print(clean_strings[i % len(clean_strings)])
+        i += 1
+        with open("position.txt", "w") as position:
+            position.write(str(i))
+        time.sleep(1)
+    return 0
 
-with open("position.txt") as position:
-    i = int(position.read().strip())
-
-while 1:
-    print(clean_strings[i % 100])
-    i += 1
-    with open("position.txt", "w") as position:
-        position.write(str(i))
-    time.sleep(1)
+if __name__ == "__main__":
+    sys.exit(main())

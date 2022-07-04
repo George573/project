@@ -25,7 +25,6 @@ def main() -> int:
                     cont = True
                     print("continue")
 
-
     else:
         with open("queries.txt") as file:
             strings = [line.rstrip() for line in file]

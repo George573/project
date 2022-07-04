@@ -1,11 +1,11 @@
-import sys, time, threading, os, signal
+import sys, time, os, signal, requests
 
 def main() -> int:
     pid = os.fork()
 
     if pid:
         stoped = False
-        cont = False
+        cont = True
         while True:
             i = input()
             if   i == 'k':
@@ -24,7 +24,6 @@ def main() -> int:
                     stoped = False
                     cont = True
                     print("continue")
-
 
     else:
         with open("queries.txt") as file:

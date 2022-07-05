@@ -41,22 +41,22 @@ def main() -> int:
         except:
             i = 1
         
-        with open("search.txt", 'w') as f:
-            while True:
-                link = "https://www.google.dz/search?q="
-                search = (clean_strings[i % len(clean_strings)])
-                page = requests.get(link + search)
-                soup = bs4.BeautifulSoup(page.content,features="lxml")
 
-                for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
+        while True:
+            link = "https://www.google.dz/search?q="
+            search = (clean_strings[i % len(clean_strings)])
+            page = requests.get(link + search)
+            soup = bs4.BeautifulSoup(page.content,features="lxml")
+
+            for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
+                with open("search.txt", 'a') as f:
                     f.write((re.split(":(?=http)",link["href"].replace("/url?q=","")))[0])
                     f.write("\n")
-                
-
-                i += 1
-                with open("position.txt", "w") as file:
-                    file.write(str(i))
-                time.sleep(1)
+            
+            i += 1
+            with open("position.txt", "w") as file:
+                file.write(str(i))
+            time.sleep(1)
 
 if __name__ == "__main__":
     sys.exit(main()) 

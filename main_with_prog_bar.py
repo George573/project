@@ -6,7 +6,7 @@ def progress_bar(i) -> int:
         print("working \ō͡≡o˞̶")
     erase_line = '\x1b[1A\x1b[2K'
     sys.stdout.write(erase_line)
-    print("\r","working", " " * (i % 25), "\ō͡≡o˞̶")
+    print("working", " " * (i % 25), "\ō͡≡o˞̶")
     i += 1
     return i
 

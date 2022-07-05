@@ -47,11 +47,10 @@ def main() -> int:
             search = (clean_strings[i % len(clean_strings)])
             page = requests.get(link + search)
             soup = bs4.BeautifulSoup(page.content,features="lxml")
-
-            for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
-                with open("search.txt", 'a') as f:
-                    f.write((re.split(":(?=http)",link["href"].replace("/url?q=","")))[0])
-                    f.write("\n")
+            with open("search.txt", 'a') as f:
+                for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
+                        f.write((re.split(":(?=http)",link["href"].replace("/url?q=","")))[0])
+                        f.write("\n")
             
             i += 1
             with open("position.txt", "w") as file:

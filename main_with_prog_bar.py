@@ -1,4 +1,16 @@
-import sys, os, signal, requests, re, bs4
+import sys, os, signal, requests, re, bs4, time
+
+
+def progress_bar(i) -> int:
+    list = ['|', "╱", "─", "╲"]
+    if i == 0:
+        print("working \ō͡≡o˞̶")
+    erase_line = '\x1b[1A\x1b[2K'
+    sys.stdout.write(erase_line)
+    print("\r","working", " " * (i % 25), "\ō͡≡o˞̶")
+    i += 1
+    return i
+
 
 def main() -> int:
     pid = os.fork()
@@ -26,6 +38,7 @@ def main() -> int:
                     stoped = False
                     cont = True
                     print("awakened sucsefully ＼(o ￣∇￣o)/")
+                    print(' ')
 
     #Child:
     else:
@@ -44,7 +57,9 @@ def main() -> int:
         except:
             i = 1
 
+        progress = 0
         while True:
+            progress = progress_bar(progress)
             link = "https://www.google.com/search?q="
             search = (clean_strings[i % len(clean_strings)])
             r = requests.get(link + search)

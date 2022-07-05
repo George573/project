@@ -23,6 +23,7 @@ def main() -> int:
             i = input()
             if   i == 'k':
                 os.kill(pid, signal.SIGKILL)
+                os.system('clear')
                 print("killed sucsefully  (⌣́_⌣̀)")
                 sys.exit(0)
             elif i == 's':
@@ -30,13 +31,15 @@ def main() -> int:
                     os.kill(pid, signal.SIGSTOP)
                     stoped = True
                     cont = False
-                    print("suspended sucsefully 💤")
+                    os.system('clear')
+                    print("type: k - to kill, s - to suspend, c - to wake up\nsuspended sucsefully 💤")
             elif i == 'c':
                 if not cont:
                     os.kill(pid, signal.SIGCONT)
                     stoped = False
                     cont = True
-                    print("awakened sucsefully ＼(o ￣∇￣o)/")
+                    os.system('clear')
+                    print("type: k - to kill, s - to suspend, c - to wake up\nawakened sucsefully ＼(o ￣∇￣o)/")
                     print(' ')
 
     #Child:

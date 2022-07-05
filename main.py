@@ -1,4 +1,4 @@
-import sys, time, os, signal, requests, re, bs4
+import sys, os, signal, requests, re, bs4
 
 def main() -> int:
     pid = os.fork()
@@ -41,21 +41,19 @@ def main() -> int:
         except:
             i = 1
         
-
         while True:
-            link = "https://www.google.dz/search?q="
+            link = "https://www.google.com/search?q="
             search = (clean_strings[i % len(clean_strings)])
             page = requests.get(link + search)
             soup = bs4.BeautifulSoup(page.content,features="lxml")
             with open("search.txt", 'a') as f:
-                for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
-                        f.write((re.split(":(?=http)",link["href"].replace("/url?q=","")))[0])
-                        f.write("\n")
-            
+                links = soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)"))
+                for i in range(0, len(links) - 2):
+                        f.write((re.split(":(?=http)",links[i]["href"].replace("/url?q=","")))[0])
+                        f.write("\n")           
             i += 1
             with open("position.txt", "w") as file:
                 file.write(str(i))
-            time.sleep(1)
 
 if __name__ == "__main__":
     sys.exit(main()) 

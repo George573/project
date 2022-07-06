@@ -69,8 +69,7 @@ def main() -> int:
 
         progress = 0 #needed for progress bar
         while True:
-            #printing progress bar
-            progress = progress_bar(progress)
+            progress = progress_bar(progress) #printing progress bar
             link = "https://www.google.com/search?q="
             #getting search strings
             search = (clean_strings[i % len(clean_strings)])

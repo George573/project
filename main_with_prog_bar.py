@@ -4,9 +4,10 @@ import sys, os, signal, requests, re, bs4, time
 def progress_bar(i) -> int:
     if i == 0:
         print("working \ō͡≡o˞̶")
-    erase_line = '\x1b[1A\x1b[2K'
-    sys.stdout.write(erase_line)
-    print("working", " " * (i % 25), " \ō͡≡o˞̶")
+    else:
+        erase_line = '\x1b[1A\x1b[2K'
+        sys.stdout.write(erase_line)
+        print("working", " " * (i % 25), "\ō͡≡o˞̶")
     i += 1
     return i
 

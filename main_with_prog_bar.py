@@ -1,4 +1,4 @@
-import sys, os, signal, requests, re, bs4, time
+import sys, os, signal, requests, re, bs4
 
 
 def progress_bar(i) -> int:

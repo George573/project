@@ -1,4 +1,3 @@
-from multiprocessing.connection import wait
 import sys, os, search, ui, threading
 
 class thread(threading.Thread):

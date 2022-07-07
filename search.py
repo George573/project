@@ -1,6 +1,4 @@
 import sys, requests, bs4, re
-from turtle import pos
-from tabnanny import check
 
 class search:
     def __init__(self, queries_file,  position, links_file = "search.txt", position_file = "position.txt") -> None:
@@ -89,9 +87,9 @@ class search:
         for page_number in range(page_from, page_to):
             if page_number == self.page_number:
                 page_number = self.page_number
-            progress = self.progress_bar(progress) #printing progress bar
             page = "&start=" + str(page_number)
             for self.position in range(self.position, len(self.clean_strings)):
+                progress = self.progress_bar(progress) #printing progress bar
                 #creating a link
                 clean_sting = (self.clean_strings[self.position])
                 r = requests.get(link + clean_sting + page)

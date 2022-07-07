@@ -6,9 +6,9 @@ class ui:
         self.ppid = ppid
         self.stoped = False
         self.cont = True
+        print("type: k - to kill, s - to suspend, c - to wake up")
     
     def get_input(self):
-        print("type: k - to kill, s - to suspend, c - to wake up")
         inp = input()
         if   inp == 'k':
             #killing the child ψ(｀∇´)ψ

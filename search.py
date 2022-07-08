@@ -1,5 +1,4 @@
 import sys, requests, bs4, re
-from turtle import pos
 
 class search:
     def __init__(self, queries_file, position, start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
@@ -95,7 +94,6 @@ class search:
         for page_number in range(page_from, page_to):
             if page_number == page_from:
                 page_number = self.page_number
-                print(page_number, " ", self.page_number)
             elif page_number > page_from:
                 self.position = 1
             page = "&start=" + str(page_number)

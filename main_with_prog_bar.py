@@ -1,5 +1,4 @@
 import sys, os, search, ui, threading
-from unittest import runner
 
 class thread(threading.Thread):
     def __init__(self, cpid, ppid) -> None:

@@ -1,4 +1,4 @@
-import sys, requests, bs4, re
+import time, sys, requests, bs4, re
 
 class search:
     def __init__(self, queries_file, position = "", start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
@@ -125,7 +125,7 @@ class search:
                     f.write((re.split(":(?=http)",links[i]["href"].replace("/url?q=","")))[0])
                     f.write("\n")
     
-    def google_search(self, page_from = 1, page_to = 2):
+    def google_search(self, page_from = 1, page_to = 2, delay = 0.1):
         progress = 0 #needed for progress bar
         link = "https://www.google.com/search?q="
         page_from, page_to = self.check_values(page_from, page_to)
@@ -139,6 +139,7 @@ class search:
                 self.extract_links(soup)
                 with open(self.position_file, "w") as file:
                     file.write(str(position) + " " + str(page_number))
+                time.sleep(delay)
             self.position = 1
 
     def progress_bar(self, i) -> int:

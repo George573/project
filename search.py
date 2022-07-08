@@ -1,22 +1,30 @@
 import sys, requests, bs4, re
+from turtle import pos
 
 class search:
-    def __init__(self, queries_file,  position, links_file = "search.txt", position_file = "position.txt") -> None:
+    def __init__(self, queries_file, position, start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
         self.links_file = links_file
         self.position_file = position_file
         self.queries_file = queries_file
         self.clean_strings = self.get_queries(queries_file)
-        self.page_number = self.get_page_number(position)
-        self.position = self.get_postion(position)
+        self.start_over(start_over, position)
+
+    def start_over(self, start_over, position):
+        if start_over:
+            self.page_number = 1
+            self.position = 1
+        else:
+            self.page_number = self.get_page_number(position)
+            self.position = self.get_postion(position)
 
     def separate_position(self, file, type) -> int:
         with open(file) as f:
             string = f.read()
         list = string.split()
         if type == "position":
-            type = 0
-        elif type == "page":
             type = 1
+        elif type == "page":
+            type = 0
         else:
             self.fatal_error("separate_position()", "wrong input")
         return int(list[type].strip())
@@ -85,8 +93,11 @@ class search:
         page_from, page_to = self.check_values(page_from, page_to)
 
         for page_number in range(page_from, page_to):
-            if page_number == self.page_number:
+            if page_number == page_from:
                 page_number = self.page_number
+                print(page_number, " ", self.page_number)
+            elif page_number > page_from:
+                self.position = 1
             page = "&start=" + str(page_number)
             for self.position in range(self.position, len(self.clean_strings)):
                 progress = self.progress_bar(progress) #printing progress bar
@@ -104,26 +115,30 @@ class search:
                             f.write("\n")
                 #writing position to a file
                 with open(self.position_file, "w") as file:
-                    file.write(str(self.position) + " " + str(self.page_number))
+                    file.write(str(self.position) + " " + str(page_number))
 
     def check_values(self, page_from, page_to) -> int:
         if page_from < 0:
             page_from *= -1
         elif page_from == 0:
-            page_from = 1
-        
+            page_from = -1
+
         if page_to < 0:
-            page_from *= -1
+            page_to *= -1
         elif page_to == 0:
             page_to = page_to + 1
-        
+
         if page_from > page_to:
-            page_to = page_from + 1
+            val = page_to
+            page_to = page_from
+            page_from = val
         elif page_from == page_to:
             page_to += 1
 
+
         if not (page_from <= self.page_number < page_to):
             self.page_number = page_from
+
         if self.position > len(self.clean_strings):
             self.position = 1
 

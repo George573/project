@@ -117,35 +117,29 @@ class search:
 
         return page_from, page_to
     
-    def extract_links(self, link, page, page_number, progress):
-        for position in range(self.position, len(self.clean_strings)):
-                progress = self.progress_bar(progress) #printing progress bar
-                #creating a link
-                clean_sting = (self.clean_strings[position])
-                r = requests.get(link + clean_sting + page)
-                #creating BeautifulSoup object, which represents html file
-                soup = bs4.BeautifulSoup(r.content, features="html.parser")
-                #searching for links in html response from google
-                with open(self.links_file, 'a') as f:
-                    links = soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)"))
-                    for i in range(0, len(links) - 2): #last two links are accounts.google.com, support.google.com
-                            #writing links to a file
-                            f.write((re.split(":(?=http)",links[i]["href"].replace("/url?q=","")))[0])
-                            f.write("\n")
-                #writing position to a file
-                with open(self.position_file, "w") as file:
-                    file.write(str(position) + " " + str(page_number))
-        return position
-
+    def extract_links(self, soup):
+        with open(self.links_file, 'a') as f:
+            links = soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)"))
+            for i in range(0, len(links) - 2): #last two links are accounts.google.com, support.google.com
+                    #writing links to a file
+                    f.write((re.split(":(?=http)",links[i]["href"].replace("/url?q=","")))[0])
+                    f.write("\n")
+    
     def google_search(self, page_from = 1, page_to = 2):
         progress = 0 #needed for progress bar
         link = "https://www.google.com/search?q="
-
         page_from, page_to = self.check_values(page_from, page_to)
-
         for page_number in range(self.page_number, page_to):
             page = "&start=" + str(page_number)
-            self.position = self.extract_links(link, page, page_number, progress)
+            for position in range(self.position, len(self.clean_strings)):
+                progress = self.progress_bar(progress)
+                clean_sting = (self.clean_strings[position])
+                r = requests.get(link + clean_sting + page)
+                soup = bs4.BeautifulSoup(r.content, features="html.parser")
+                self.extract_links(soup)
+                with open(self.position_file, "w") as file:
+                    file.write(str(position) + " " + str(page_number))
+            self.position = 1
 
     def progress_bar(self, i) -> int:
         if i == 0:

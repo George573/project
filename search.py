@@ -16,28 +16,6 @@ class search:
             self.page_number = self.get_page_number(position)
             self.position = self.get_postion(position)
 
-    def separate_position(self, file, type) -> int:
-        with open(file) as f:
-            string = f.read()
-        list = string.split()
-        if type == "position":
-            type = 1
-        elif type == "page":
-            type = 0
-        else:
-            self.fatal_error("separate_position()", "wrong input")
-        return int(list[type].strip())
-
-    def separate_position_no_file(self, position, type) -> int:
-        list = position.split()
-        if type == "position":
-            type = 0
-        elif type == "page":
-            type = 1
-        else:
-            self.fatal_error("separate_position()", "wrong input")
-        return int(list[type].strip())
-    
     def get_queries(self, queries_file):
         if queries_file:
             with open(queries_file) as file:
@@ -51,39 +29,93 @@ class search:
             return clean_strings
         else:
             self.fatal_error("get_queries()", "wrong input")
+
+    def separate_position(self, file, type) -> int:
+        with open(file) as f:
+            string = f.read()
+        list = string.split()
+        if type == "position":
+            type = 0
+        elif type == "page":
+            type = 1
+        else:
+            raise Exception(self.fatal_error("separate_position()", "wrong input", fix="automatically handled 🔧" ,exit=False))
+        if (len(list)) != 2:
+            self.position_warning("separate_position()", "Too many arguments")
+        return int(list[type].strip())
+
+    def separate_position_no_file(self, position, type) -> int:
+        list = position.split()
+        if type == "position":
+            type = 0
+        elif type == "page":
+            type = 1
+        else:
+            raise Exception(self.fatal_error("separate_position_no_file()", "wrong input", fix="automatically handled 🔧",exit=False))
+        if (len(list)) != 2:
+            self.position_warning("separate_position_no_file()", "Too many arguments")
+        return int(list[type].strip())
         
     def get_page_number(self, position):
         if position:
-            return self.separate_position_no_file(position, "position")
-        else:
             try:
-                return self.separate_position(self.position_file, "position")
+                return self.separate_position_no_file(position, "page")
             except:
-                return 1
-
-    def get_postion(self, position):
-        if position:
-            return self.separate_position_no_file(position, "page")
+                self.position_warning("get_page_number")
+                return self.get_postion(position=0)
         else:
             try:
                 return self.separate_position(self.position_file, "page")
             except:
                 return 1
 
-    def progress_bar(self, i) -> int:
-        if i == 0:
-            print("working \ō͡≡o˞̶")
+    def get_postion(self, position):
+        if position:
+            try:
+                return self.separate_position_no_file(position, "position")
+            except:
+                self.position_warning("get_position()")
+                return self.get_postion(position=0)
         else:
-            #erasing upper line
-            sys.stdout.write('\x1b[1A\x1b[2K')
-            #progress bar
-            print("working", " " * (i % 25), "\ō͡≡o˞̶")
-        i += 1
-        return i
-    
-    def fatal_error(self, place, reason):
-        print("error occurred in ", place.strip(), " reason: ", reason)
-        sys.exit(1)
+            try:
+                return self.separate_position(self.position_file, "position")
+            except:
+                return 1
+
+    def check_values(self, page_from, page_to) -> int:
+        if page_from < 0:
+            page_from *= -1
+            self.warning("check_values()", "page_from can't be smaller than 0")
+        elif page_from == 0:
+            page_from = 1
+            self.warning("check_values()", "page_from can't be equal to 0")
+
+        if page_to < 0:
+            page_to *= -1
+            self.warning("check_values()", "page_to can't be smaller than 0")
+        elif page_to == 0:
+            page_to = page_to + 1
+            self.warning("check_values()", "page_to can't be equal to 0")
+
+        if page_from > page_to:
+            val = page_to
+            page_to = page_from
+            page_from = val
+            self.warning("check_values()", "pafe_from can't be bigger than page_to")
+        elif page_from == page_to:
+            page_to += 1
+            self.warning("check_values()", "pafe_from and page_to can't be equal")
+
+
+        if not (page_from <= self.page_number < page_to):
+            self.page_number = page_from
+            self.warning("check_values()", "page number must be in range of page_from to page_to")
+
+        if self.position >= len(self.clean_strings):
+            self.position = 1
+            self.warning("check_values()", "position can't be bigger than amount of queries")
+
+        return page_from, page_to
 
     def google_search(self, page_from = 1, page_to = 2):
         progress = 0 #needed for progress bar
@@ -115,29 +147,25 @@ class search:
                 with open(self.position_file, "w") as file:
                     file.write(str(self.position) + " " + str(page_number))
 
-    def check_values(self, page_from, page_to) -> int:
-        if page_from < 0:
-            page_from *= -1
-        elif page_from == 0:
-            page_from = -1
+    def progress_bar(self, i) -> int:
+        if i == 0:
+            print("working \ō͡≡o˞̶")
+        else:
+            #erasing upper line
+            sys.stdout.write('\x1b[1A\x1b[2K')
+            #progress bar
+            print("working", " " * (i % 25), "\ō͡≡o˞̶")
+        i += 1
+        return i
 
-        if page_to < 0:
-            page_to *= -1
-        elif page_to == 0:
-            page_to = page_to + 1
+    def fatal_error(self, place, reason, fix = "", exit = True):
+        print("Error occurred in ", place.strip(), ",\n reason: ", reason, "\n fix:", fix)
+        if exit:
+            sys.exit(1)
+        
+    def warning(self, place, reason, fix="Fixed by the professional team of robots 🤖"):
+        print("Warning: in ", place.strip(), ",\n reason:", reason, "\n fix:", fix)
 
-        if page_from > page_to:
-            val = page_to
-            page_to = page_from
-            page_from = val
-        elif page_from == page_to:
-            page_to += 1
-
-
-        if not (page_from <= self.page_number < page_to):
-            self.page_number = page_from
-
-        if self.position >= len(self.clean_strings):
-            self.position = 1
-
-        return page_from, page_to
+    def position_warning(self, place, reason="Wrong imput."):
+        self.warning(place, reason, 
+                "Position need to be string in form: 'position page' ('1 1'). Where 'position' is position(int) inside of file and 'page' is page number(int)")

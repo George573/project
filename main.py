@@ -22,7 +22,7 @@ def main() -> int:
         return 0
     #Child:
     else:
-        searchg = search.search(queries_file="queries.txt", position=0)
+        searchg = search.search(queries_file="queries.txt", position="1")
         searchg.google_search(-2, -5)
         
 

@@ -1,7 +1,7 @@
 import sys, requests, bs4, re
 
 class search:
-    def __init__(self, queries_file, position, start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
+    def __init__(self, queries_file, position = "", start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
         self.links_file = links_file
         self.position_file = position_file
         self.queries_file = queries_file
@@ -116,23 +116,12 @@ class search:
             self.warning("check_values()", "position can't be bigger than amount of queries")
 
         return page_from, page_to
-
-    def google_search(self, page_from = 1, page_to = 2):
-        progress = 0 #needed for progress bar
-        link = "https://www.google.com/search?q="
-
-        page_from, page_to = self.check_values(page_from, page_to)
-
-        for page_number in range(page_from, page_to):
-            if page_number == page_from:
-                page_number = self.page_number
-            elif page_number > page_from:
-                self.position = 1
-            page = "&start=" + str(page_number)
-            for self.position in range(self.position, len(self.clean_strings)):
+    
+    def extract_links(self, link, page, page_number, progress):
+        for position in range(self.position, len(self.clean_strings)):
                 progress = self.progress_bar(progress) #printing progress bar
                 #creating a link
-                clean_sting = (self.clean_strings[self.position])
+                clean_sting = (self.clean_strings[position])
                 r = requests.get(link + clean_sting + page)
                 #creating BeautifulSoup object, which represents html file
                 soup = bs4.BeautifulSoup(r.content, features="html.parser")
@@ -145,7 +134,18 @@ class search:
                             f.write("\n")
                 #writing position to a file
                 with open(self.position_file, "w") as file:
-                    file.write(str(self.position) + " " + str(page_number))
+                    file.write(str(position) + " " + str(page_number))
+        return position
+
+    def google_search(self, page_from = 1, page_to = 2):
+        progress = 0 #needed for progress bar
+        link = "https://www.google.com/search?q="
+
+        page_from, page_to = self.check_values(page_from, page_to)
+
+        for page_number in range(self.page_number, page_to):
+            page = "&start=" + str(page_number)
+            self.position = self.extract_links(link, page, page_number, progress)
 
     def progress_bar(self, i) -> int:
         if i == 0:

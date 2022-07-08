@@ -2,10 +2,9 @@ import time, sys, requests, bs4, re
 
 class search:
     def __init__(self, queries_file, position = "", start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
-        self.links_file = links_file
-        self.position_file = position_file
         self.queries_file = queries_file
         self.clean_strings = self.get_queries(queries_file)
+        self.set_file_names(links_file, position_file)
         self.start_over(start_over, position)
 
     def start_over(self, start_over, position):
@@ -15,20 +14,6 @@ class search:
         else:
             self.page_number = self.get_page_number(position)
             self.position = self.get_postion(position)
-
-    def get_queries(self, queries_file):
-        if queries_file:
-            with open(queries_file) as file:
-                strings = [line.rstrip() for line in file]
-            #cleaning from empty strings and replacing space with +
-            clean_strings = []
-            for line in strings:
-                if line.strip():
-                    line = line.replace(' ', '+')
-                    clean_strings.append(line)
-            return clean_strings
-        else:
-            self.fatal_error("get_queries()", "wrong input")
 
     def separate_position(self, file, type) -> int:
         with open(file) as f:
@@ -55,6 +40,30 @@ class search:
         if (len(list)) != 2:
             self.position_warning("separate_position_no_file()", "Too many arguments")
         return int(list[type].strip())
+
+    def set_file_names(self, links_file, position_file):
+        if self.check_file_name(links_file):
+            self.links_file = links_file
+        else:
+            self.links_file = "search.txt"
+        if self.check_file_name(position_file):
+            self.position_file = position_file
+        else:
+            self.position_file = "position.txt"
+        
+    def get_queries(self, queries_file):
+        if queries_file:
+            with open(queries_file) as file:
+                strings = [line.rstrip() for line in file]
+            #cleaning from empty strings and replacing space with +
+            clean_strings = []
+            for line in strings:
+                if line.strip():
+                    line = line.replace(' ', '+')
+                    clean_strings.append(line)
+            return clean_strings
+        else:
+            self.fatal_error("get_queries()", "wrong input")
         
     def get_page_number(self, position):
         if position:
@@ -81,6 +90,14 @@ class search:
                 return self.separate_position(self.position_file, "position")
             except:
                 return 1
+
+    def check_file_name(self, file_name) -> bool:
+        list = file_name.split(".")
+        if len(list) == 2 and list[1] == "txt":
+            return True
+        else:
+            return False
+
 
     def check_values(self, page_from, page_to) -> int:
         if page_from < 0:

@@ -1,5 +1,4 @@
 import sys, requests, bs4, re
-from turtle import pos
 
 class search:
     def __init__(self, queries_file, position, start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:

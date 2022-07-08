@@ -137,7 +137,7 @@ class search:
         if not (page_from <= self.page_number < page_to):
             self.page_number = page_from
 
-        if self.position > len(self.clean_strings):
+        if self.position >= len(self.clean_strings):
             self.position = 1
 
         return page_from, page_to

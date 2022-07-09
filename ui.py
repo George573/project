@@ -19,6 +19,8 @@ class ui:
         elif inp == 'c':
             #awakening the child (ಠ¿ಠ)
             self.continue_kid(self.cpid)
+        elif inp == 'e':
+            self.exit()
             
     def kill_kid(self, cpid):
         os.kill(cpid, signal.SIGKILL)
@@ -42,3 +44,6 @@ class ui:
             os.system('clear')
             print("type: k - to kill, s - to suspend, c - to wake up\nawakened sucsefully ᕕ( ಠ‿ಠ )ᕗ")
             print(' ')
+
+    def exit(self):
+        sys.exit(0)

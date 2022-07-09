@@ -210,7 +210,7 @@ class search:
     
     def done(self):
         sys.stdout.write('\x1b[1A\x1b[2K')
-        print("Done ✓\nPress 'k' to exit.")
+        print("Done ✓")
 
     def fatal_error(self, place, reason, fix = "", exit = True):
         print("Error occurred in ", place.strip(), ",\n reason: ", reason, "\n fix:", fix)

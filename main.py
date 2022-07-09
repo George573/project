@@ -19,6 +19,7 @@ def main() -> int:
         thread1 = thread(pid, os.getpid())
         thread1.start()
         os.wait()
+        print("Type 'e' to exit")
         return 0
     #Child:
     else:
@@ -28,7 +29,7 @@ def main() -> int:
         '''
         #normal input
         searchg = search.search(queries_file="queries.txt", start_over=True)
-        searchg.google_search(1, 4, 0.5)
+        searchg.google_search(1, 2, 0.5)
         
 
 if __name__ == "__main__":

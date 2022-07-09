@@ -22,8 +22,13 @@ def main() -> int:
         return 0
     #Child:
     else:
-        searchg = search.search(queries_file="queries.txt", position=0.1, links_file=1, position_file="pos", start_over="2")
-        searchg.google_search("-3", 2, "-0.2")
+        '''test input
+        searchg = search.search(queries_file="queries.txt", position="1", start_over=True, links_file=1, position_file="nope.tx")
+        searchg.google_search("4", -1, "hi")
+        '''
+        #normal input
+        searchg = search.search(queries_file="queries.txt", start_over=True)
+        searchg.google_search(1, 4, 0.5)
         
 
 if __name__ == "__main__":

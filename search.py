@@ -1,3 +1,4 @@
+from asyncore import write
 import time, sys, requests, bs4, re
 
 class search:
@@ -92,12 +93,21 @@ class search:
                 return 1
 
     def check_file_name(self, file_name) -> bool:
-        list = str(file_name).split(".")
+        try:
+            with open(file_name, "r") as f:
+                return True
+        except:
+            try:
+                with open(file_name, "w") as f:
+                    return True
+            except:
+                return False
+        '''list = str(file_name).split(".")
         if len(list) == 2 and list[1] == "txt":
             return True
         else:
             self.warning("check_file_name()", "Wrong input file")
-            return False
+            return False'''
 
     def check_delay_file_type(self, delay) -> float:
         if isinstance(delay, (int, float)):

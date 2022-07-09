@@ -92,12 +92,39 @@ class search:
                 return 1
 
     def check_file_name(self, file_name) -> bool:
-        list = file_name.split(".")
+        list = str(file_name).split(".")
         if len(list) == 2 and list[1] == "txt":
             return True
         else:
             return False
 
+    def check_delay_file_type(self, delay) -> float:
+        if isinstance(delay, (int, float)):
+            if delay < 0:
+                return float(delay * -1)
+            else:
+                return float(delay)
+        elif isinstance(delay, (str)):
+            delay = float(delay.strip())
+            if delay < 0:
+                return float(delay * -1)
+            else:
+                return float(delay)
+        else:
+            return 0.1
+
+    def check_page_type(self, page, type) -> int:
+        if isinstance(page, (int)):
+            return page
+        elif isinstance(page, (str)):
+            return int(page.strip())
+        else:
+            if type == "page_from":
+                return 1
+            elif type == "page_to":
+                return 2
+            else:
+                self.fatal_error("check_page_type()", "wrong type")
 
     def check_values(self, page_from, page_to) -> int:
         if page_from < 0:
@@ -143,6 +170,9 @@ class search:
                     f.write("\n")
     
     def google_search(self, page_from = 1, page_to = 2, delay = 0.1):
+        delay = self.check_delay_file_type(delay)
+        page_from = self.check_page_type(page_from, "page_from")
+        page_to = self.check_page_type(page_to, "page_to")
         progress = 0 #needed for progress bar
         link = "https://www.google.com/search?q="
         page_from, page_to = self.check_values(page_from, page_to)
@@ -158,6 +188,9 @@ class search:
                     file.write(str(position) + " " + str(page_number))
                 time.sleep(delay)
             self.position = 1
+        with open(self.position_file, "w") as file:
+            file.write("1 1")
+        self.done()
 
     def progress_bar(self, i) -> int:
         if i == 0:
@@ -169,6 +202,10 @@ class search:
             print("working", " " * (i % 25), "\ō͡≡o˞̶")
         i += 1
         return i
+    
+    def done(self):
+        sys.stdout.write('\x1b[1A\x1b[2K')
+        print("Done ✓\nPress 'k' to exit.")
 
     def fatal_error(self, place, reason, fix = "", exit = True):
         print("Error occurred in ", place.strip(), ",\n reason: ", reason, "\n fix:", fix)
@@ -178,6 +215,6 @@ class search:
     def warning(self, place, reason, fix="Fixed by the professional team of robots 🤖"):
         print("Warning: in ", place.strip(), ",\n reason:", reason, "\n fix:", fix)
 
-    def position_warning(self, place, reason="Wrong imput."):
+    def position_warning(self, place, reason="Wrong input."):
         self.warning(place, reason, 
                 "Position need to be string in form: 'position page' ('1 1'). Where 'position' is position(int) inside of file and 'page' is page number(int)")

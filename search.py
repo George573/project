@@ -96,17 +96,21 @@ class search:
         if len(list) == 2 and list[1] == "txt":
             return True
         else:
+            self.warning("check_file_name()", "Wrong input file")
             return False
 
     def check_delay_file_type(self, delay) -> float:
         if isinstance(delay, (int, float)):
             if delay < 0:
+                self.warning("check_delay_file_type()", "Delay value can't be smaller than 0")
                 return float(delay * -1)
             else:
                 return float(delay)
         elif isinstance(delay, (str)):
+            self.warning("check_delay_file_type()", "Delay must be float or int")
             delay = float(delay.strip())
             if delay < 0:
+                self.warning("check_delay_file_type()", "Delay value can't be smaller than 0")
                 return float(delay * -1)
             else:
                 return float(delay)
@@ -114,9 +118,10 @@ class search:
             return 0.1
 
     def check_page_type(self, page, type) -> int:
-        if isinstance(page, (int)):
-            return page
+        if isinstance(page, (int, float)):
+            return int(page)
         elif isinstance(page, (str)):
+            self.warning("check_page_type()", "Page value must be int")
             return int(page.strip())
         else:
             if type == "page_from":

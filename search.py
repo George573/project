@@ -1,4 +1,3 @@
-from asyncore import write
 import time, sys, requests, bs4, re
 
 class search:

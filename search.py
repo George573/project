@@ -2,8 +2,8 @@ import time, sys, requests, bs4, re, settings, filehandler
 
 class search:
     def __init__(self, queries_file, attempts = 5, position = "", start_over = False, links_file = "search.txt", position_file = "position.txt") -> None:
-        self.set1ngs = settings.settings(queries_file, attempts, position, start_over, links_file, position_file)
-        self.file_handler = filehandler.filehandler(self.set1ngs)
+        self.file_handler = filehandler.filehandler(
+            settings.settings(queries_file, attempts, position, start_over, links_file, position_file))
         
     def extract_links(self, soup):
         links = soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)"))

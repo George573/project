@@ -2,10 +2,10 @@ import sys, filehandler
 
 class settings:
     def __init__(self, queries_file,attempts, position, start_over, links_file, position_file) -> None:
-        self.attempts = attempts
         self.position = position
         self.start_over = start_over
         self.queries_file = queries_file
+        self.attempts = self.set_attempts_value(attempts)
         self.set_file_names(links_file, position_file)
 
     def set_file_names(self, links_file, position_file):
@@ -17,6 +17,13 @@ class settings:
             self.position_file = position_file
         else:
             self.position_file = "position.txt"
+
+    def set_attempts_value(self, attempts) -> int:
+        if isinstance(attempts, (int, bool)):
+            return int(attempts)
+        else:
+            self.warning("set_attempts_value", "wrong input type (has to be int)")
+            return 5
 
     def check_file_name(self, file_name) -> bool:
         try:

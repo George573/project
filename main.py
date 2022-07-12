@@ -28,7 +28,7 @@ def main() -> int:
         searchg.google_search("4", -1, "hi")
         '''
         #normal input
-        searchg = search.search(queries_file="queries.txt", start_over=False)
+        searchg = search.search(queries_file="queries.txt", start_over=True)
         searchg.google_search(1, 2, 0.5)
         
 

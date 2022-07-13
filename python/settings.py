@@ -117,7 +117,7 @@ class settings:
             self.position = 1
             self.warning("check_values()", "position can't be bigger than amount of queries")
 
-        return page_from, page_to
+        return int(page_from), int(page_to)
 
     def fatal_error(self, place, reason, fix = "", exit = True):
         print("Error occurred in ", place.strip(), ",\n reason: ", reason, "\n fix:", fix)

@@ -1,0 +1,21 @@
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pylint.MASTER]
+ignore-paths = [
+    "tests",
+]
+load-plugins=[
+    "pylint.extensions.code_style",
+    "pylint.extensions.typing",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.broad_try_clause",
+    "pylint.extensions.confusing_elif",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.private_import",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.set_membership",
+]
+
+[tool.pylint.DESIGN]
+max-complexity=10

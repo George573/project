@@ -1,9 +1,13 @@
 import sys
 
 class filehandler:
-    def __init__(self, attempts, links_file, position_file) -> None:
+    def __init__(self, attempts) -> None:
         self.attempts = attempts
+
+    def set_links_file(self, links_file):
         self.links_file = links_file
+    
+    def set_position_file(self, position_file):
         self.position_file = position_file
         
     def read_file(self, file_name) -> str:

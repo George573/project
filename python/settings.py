@@ -3,8 +3,10 @@ import sys, filehandler
 class settings:
     def __init__(self, queries_file,attempts, position, start_over, links_file, position_file) -> None:
         self.attempts = self.set_attempts_value(attempts)
+        self.file_handler = filehandler.filehandler(attempts)
         self.set_file_names(links_file, position_file)
-        self.file_handler = filehandler.filehandler(attempts, self.links_file, self.position_file)
+        self.file_handler.set_links_file(self.links_file)
+        self.file_handler.set_position_file(self.position_file)
         self.clean_strings = self.file_handler.get_queries(queries_file)
         self.start_over(start_over, position)
   
@@ -35,16 +37,13 @@ class settings:
 
     def check_file_name(self, file_name) -> bool:
         try:
-            print(file_name)
             self.file_handler.read_file(file_name)
-            print(True)
             return True
         except:
             try:
                 self.file_handler.write_file(file_name,"")
                 return True
             except:
-                print(False)
                 return False
         '''list = str(file_name).split(".")
         if len(list) == 2 and list[1] == "txt":

@@ -2,21 +2,29 @@ import sys, filehandler
 
 class settings:
     def __init__(self, queries_file,attempts, position, start_over, links_file, position_file) -> None:
-        self.position = position
-        self.start_over = start_over
-        self.queries_file = queries_file
         self.attempts = self.set_attempts_value(attempts)
         self.set_file_names(links_file, position_file)
+        self.file_handler = filehandler.filehandler(attempts, self.links_file, self.position_file)
+        self.clean_strings = self.file_handler.get_queries(queries_file)
+        self.start_over(start_over, position)
+  
+    def start_over(self, start_over, position):
+        if start_over:
+            self.page_number = 1
+            self.position = 1
+        else:
+            self.page_number = self.file_handler.get_page_number(position)
+            self.position = self.file_handler.get_postion(position)
 
     def set_file_names(self, links_file, position_file):
         if self.check_file_name(links_file):
             self.links_file = links_file
         else:
-            self.links_file = "search.txt"
+            self.links_file = "./files/search.txt"
         if self.check_file_name(position_file):
             self.position_file = position_file
         else:
-            self.position_file = "position.txt"
+            self.position_file = "./files/position.txt"
 
     def set_attempts_value(self, attempts) -> int:
         if isinstance(attempts, (int, bool)):
@@ -27,11 +35,16 @@ class settings:
 
     def check_file_name(self, file_name) -> bool:
         try:
-            filehandler.filehandler.read_file(file_name)
+            print(file_name)
+            self.file_handler.read_file(file_name)
+            print(True)
+            return True
         except:
             try:
-                filehandler.filehandler.write_file("")
+                self.file_handler.write_file(file_name,"")
+                return True
             except:
+                print(False)
                 return False
         '''list = str(file_name).split(".")
         if len(list) == 2 and list[1] == "txt":

@@ -1,13 +1,13 @@
-import settings, sys
+import sys
 
 class filehandler:
-    def __init__(self, settings) -> None:
-        self.settings = settings
-        self.settings.clean_strings = self.get_queries(settings.queries_file)
-        self.start_over()
-
+    def __init__(self, attempts, links_file, position_file) -> None:
+        self.attempts = attempts
+        self.links_file = links_file
+        self.position_file = position_file
+        
     def read_file(self, file_name) -> str:
-        for i in range(0, self.settings.attempts):
+        for i in range(0, self.attempts):
             try:
                 with open(file_name) as file:
                     return file.read()
@@ -16,7 +16,7 @@ class filehandler:
         raise Exception("Couldn't read the file: ", file_name)
     
     def write_file(self, file_name, text) -> int:
-        for i in range(0, self.settings.attempts):
+        for i in range(0, self.attempts):
             try:
                 with open(file_name, 'w') as file:
                     file.write(text)
@@ -26,55 +26,47 @@ class filehandler:
         raise Exception("Couldn't write to the file: ", file_name)
 
     def append_to_links_file(self, text) -> int:
-        for i in range(0, self.settings.attempts):
+        for i in range(0, self.attempts):
             try:
-                with open(self.settings.links_file, 'a') as file:
+                with open(self.links_file, 'a') as file:
                     file.write(text)
                     return 0
             except:
                 pass
-        raise Exception("Couldn't write to the file: ", self.settings.links_file)
+        raise Exception("Couldn't write to the file: ", self.links_file)
 
     def read_from_position_file(self) -> str:
-        for i in range(0, self.settings.attempts):
+        for i in range(0, self.attempts):
             try:
-                with open(self.settings.position_file) as file:
+                with open(self.position_file) as file:
                     return file.read()
             except:
                 pass
-        raise Exception("Couldn't read the file: ", settings.position_file)
+        
+        raise Exception("Couldn't read the file: ", self.position_file)
     
     def write_to_position_file(self, text) -> int:
-        for i in range(0, self.settings.attempts):
+        for i in range(0, self.attempts):
             try:
-                with open(self.settings.position_file, 'w') as file:
+                with open(self.position_file, 'w') as file:
                     file.write(text)
                     return 0
             except:
                 pass
-        raise Exception("Couldn't write to the file: ", self.settings.position_file)
-
-    def start_over(self):
-        if self.settings.start_over:
-            self.settings.page_number = 1
-            self.settings.position = 1
-        else:
-            self.settings.page_number = self.get_page_number(settings.position)
-            self.settings.position = self.get_postion(settings.position)
+        raise Exception("Couldn't write to the file: ", self.position_file)
 
 
     def separate_position(self, type) -> int:
-        string = self.read_file()
+        string = self.read_from_position_file()
         list = string.split()
+        if (len(list)) != 2:
+            raise Exception("separate_position()", "Too many arguments")
         if type == "position":
-            type = 0
+            return int(list[0].strip())
         elif type == "page":
-            type = 1
+            return int(list[1].strip())
         else:
             raise Exception("separate_position()", "wrong input")
-        if (len(list)) != 2:
-            self.position_warning("separate_position()", "Too many arguments")
-        return int(list[type].strip())
 
     def separate_position_no_file(self, position, type) -> int:
         list = position.split()

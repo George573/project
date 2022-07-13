@@ -61,8 +61,7 @@ class Settings:
                 return float(delay)
         elif isinstance(delay, (str)):
             filehandler.warning("check_delay_file_type()", "Delay must be float or int")
-            delay = float(delay.strip())
-            if delay < 0:
+            if (delay := float(delay.strip())) < 0:
                 filehandler.warning("check_delay_file_type()", "Delay value can't be smaller than 0")
                 return float(delay * -1)
             else:

@@ -30,6 +30,7 @@ def main() -> int:
         #normal input
         searchg = search.search(queries_file="./files/queries.txt", start_over=False)
         searchg.google_search(1, 2, 0.5)
+        return 0
         
 
 if __name__ == "__main__":

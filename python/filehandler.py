@@ -1,15 +1,15 @@
 import sys
 
-class filehandler:
+class FileHandler:
     def __init__(self, attempts) -> None:
         self.attempts = attempts
 
     def set_links_file(self, links_file):
         self.links_file = links_file
-    
+
     def set_position_file(self, position_file):
         self.position_file = position_file
-        
+ 
     def read_file(self, file_name) -> str:
         for i in range(0, self.attempts):
             try:
@@ -18,7 +18,7 @@ class filehandler:
             except:
                 pass
         raise Exception("Couldn't read the file: ", file_name)
-    
+
     def write_file(self, file_name, text) -> int:
         for i in range(0, self.attempts):
             try:
@@ -45,10 +45,9 @@ class filehandler:
                 with open(self.position_file) as file:
                     return file.read()
             except:
-                pass
-        
+                pass  
         raise Exception("Couldn't read the file: ", self.position_file)
-    
+
     def write_to_position_file(self, text) -> int:
         for i in range(0, self.attempts):
             try:
@@ -58,7 +57,6 @@ class filehandler:
             except:
                 pass
         raise Exception("Couldn't write to the file: ", self.position_file)
-
 
     def separate_position(self, type) -> int:
         string = self.read_from_position_file()
@@ -79,9 +77,9 @@ class filehandler:
         elif type == "page":
             type = 1
         else:
-            raise Exception(self.fatal_error("separate_position_no_file()", "wrong input", fix="automatically handled 🔧",exit=False))
+            raise Exception("separate_position_no_file()", "wrong input")
         if (len(list)) != 2:
-            self.position_warning("separate_position_no_file()", "Too many arguments")
+            position_warning("separate_position_no_file()", "Too many arguments")
         return int(list[type].strip())
 
     def get_postion(self, position):
@@ -89,7 +87,7 @@ class filehandler:
             try:
                 return self.separate_position_no_file(position, "position")
             except:
-                self.position_warning("get_position()")
+                position_warning("get_position()")
                 return self.get_postion(position=0)
         else:
             try:
@@ -102,7 +100,7 @@ class filehandler:
             try:
                 return self.separate_position_no_file(position, "page")
             except:
-                self.position_warning("get_page_number")
+                position_warning("get_page_number")
                 return self.get_postion(position=0)
         else:
             try:
@@ -122,16 +120,16 @@ class filehandler:
                     clean_strings.append(line)
             return clean_strings
         else:
-            self.fatal_error("get_queries()", "wrong input")
+            fatal_error("get_queries()", "wrong input")
 
-    def fatal_error(self, place, reason, fix = "", exit = True):
-        print("Error occurred in ", place.strip(), ",\n reason: ", reason, "\n fix:", fix)
-        if exit:
-            sys.exit(1)
-        
-    def warning(self, place, reason, fix="Fixed by the professional team of robots 🤖"):
-        print("Warning: in ", place.strip(), ",\n reason:", reason, "\n fix:", fix)
+def fatal_error(place, reason, fix="", exit=True):
+    print("Error occurred in ", place.strip(), ",\n reason: ", reason, "\n fix:", fix)
+    if exit:
+        sys.exit(1)
 
-    def position_warning(self, place, reason="Wrong input."):
-        self.warning(place, reason, 
-                "Position need to be string in form: 'position page' ('1 1'). Where 'position' is position(int) inside of file and 'page' is page number(int)")
+def warning(place, reason, fix="Fixed by the professional team of robots 🤖"):
+    print("Warning: in ", place.strip(), ",\n reason:", reason, "\n fix:", fix)
+
+def position_warning(place, reason="Wrong input."):
+    warning(place, reason, 
+            "Position need to be string in form: 'position page' ('1 1'). Where 'position' is position(int) inside of file and 'page' is page number(int)")

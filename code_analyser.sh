@@ -1,3 +1,3 @@
-flake8
+pipenv run python3 -m flake8
 mypy .
-pylint ../project
+pylint ./python

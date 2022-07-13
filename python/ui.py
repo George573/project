@@ -1,13 +1,13 @@
 import os, sys, signal
 
-class ui:
+class Ui:
     def __init__(self, cpid, ppid) -> None:
         self.cpid = cpid
         self.ppid = ppid
         self.stoped = False
         self.cont = True
         print("type: k - to kill, s - to suspend, c - to wake up")
-    
+
     def get_input(self):
         inp = input()
         if   inp == 'k':
@@ -21,13 +21,13 @@ class ui:
             self.continue_kid(self.cpid)
         elif inp == 'e':
             self.exit()
-            
+   
     def kill_kid(self, cpid):
         os.kill(cpid, signal.SIGKILL)
         os.system('clear')
         print("killed sucsefully  (⌣́_⌣̀)")
         sys.exit(0)
-    
+
     def suspend_kid(self, cpid):
         if not self.stoped:
             os.kill(cpid, signal.SIGSTOP)

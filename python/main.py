@@ -1,7 +1,7 @@
 import sys, os, search, ui, threading
 
 class Thread(threading.Thread):
-    def __init__(self, cpid, ppid) -> None:
+    def __init__(self, cpid : int, ppid : int) -> None:
         super().__init__()
         self.cpid = cpid
         self.ppid = ppid

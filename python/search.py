@@ -1,11 +1,16 @@
-import time, sys, requests, bs4, re, settings
+import time, sys, requests, bs4, re
+from filehandler import FileHandler
+from settings import Settings
+
 
 class Search:
-    def __init__(self, queries_file, attempts = 5, position = "", start_over = False, 
+    def __init__(self, queries_file : str, attempts = 5, position = "", start_over = False, 
     links_file = "./files/search.txt", position_file = "./files/position.txt") -> None:
-        self.setings = settings.Settings(queries_file, attempts, position, start_over, links_file, position_file)
-        
-    def extract_links(self, soup):
+        #self.setings = Settings(queries_file, attempts, position, start_over, links_file, position_file)
+        filehandler = FileHandler(links_file, position_file, queries_file)
+        self.setings = Settings(attempts, position, start_over, filehandler)
+
+    def extract_links(self, soup : bs4.BeautifulSoup):
         links = soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)"))
         for i in range(0, len(links) - 2): #last two links are accounts.google.com, support.google.com
                 #writing links to a file
@@ -33,7 +38,7 @@ class Search:
         self.setings.file_handler.write_to_position_file("1 1")
         self.done()
 
-    def progress_bar(self, i) -> int:
+    def progress_bar(self, i : int) -> int:
         if i == 0:
             print("working \ō͡≡o˞̶")
         else:

@@ -1,13 +1,11 @@
 import filehandler
 
 class Settings:
-    def __init__(self, queries_file,attempts, position, start_over, links_file, position_file) -> None:
-        self.attempts = self.set_attempts_value(attempts)
-        self.file_handler = filehandler.FileHandler(attempts)
-        self.set_file_names(links_file, position_file)
-        self.file_handler.set_links_file(self.links_file)
-        self.file_handler.set_position_file(self.position_file)
-        self.clean_strings = self.file_handler.get_queries(queries_file)
+    def __init__(self, attempts : int, position, start_over, filehandler : filehandler.FileHandler) -> None:
+        self.file_handler = filehandler
+        self.file_handler.attempts = self.set_attempts_value(attempts)
+        self.set_file_names()
+        self.clean_strings = self.file_handler.get_queries()
         self.start_over(start_over, position)
 
     def start_over(self, start_over, position):
@@ -18,15 +16,15 @@ class Settings:
             self.page_number = self.file_handler.get_page_number(position)
             self.position = self.file_handler.get_postion(position)
 
-    def set_file_names(self, links_file, position_file):
-        if self.check_file_name(links_file):
-            self.links_file = links_file
+    def set_file_names(self):
+        if self.check_file_name(self.file_handler.links_file):
+            pass
         else:
-            self.links_file = "./files/search.txt"
-        if self.check_file_name(position_file):
-            self.position_file = position_file
+            self.file_handler.links_file = "./files/search.txt"
+        if self.check_file_name(self.file_handler.position_file):
+            pass
         else:
-            self.position_file = "./files/position.txt"
+            self.file_handler.position_file = "./files/position.txt"
 
     def set_attempts_value(self, attempts) -> int:
         if isinstance(attempts, (int, bool)):

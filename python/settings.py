@@ -1,7 +1,10 @@
 import filehandler
 
+
 class Settings:
-    def __init__(self, attempts : int, position, start_over, filehandler : filehandler.FileHandler) -> None:
+    def __init__(
+        self, attempts: int, position, start_over, filehandler: filehandler.FileHandler
+    ) -> None:
         self.file_handler = filehandler
         self.file_handler.attempts = self.set_attempts_value(attempts)
         self.set_file_names()
@@ -30,7 +33,9 @@ class Settings:
         if isinstance(attempts, (int, bool)):
             return int(attempts)
         else:
-            filehandler.warning("set_attempts_value", "wrong input type (has to be int)")
+            filehandler.warning(
+                "set_attempts_value", "wrong input type (has to be int)"
+            )
             return 5
 
     def check_file_name(self, file_name) -> bool:
@@ -39,28 +44,32 @@ class Settings:
             return True
         except:
             try:
-                self.file_handler.write_file(file_name,"")
+                self.file_handler.write_file(file_name, "")
                 return True
             except:
                 return False
-        '''list = str(file_name).split(".")
+        """list = str(file_name).split(".")
         if len(list) == 2 and list[1] == "txt":
             return True
         else:
             self.warning("check_file_name()", "Wrong input file")
-            return False'''
+            return False"""
 
     def check_delay_file_type(self, delay) -> float:
         if isinstance(delay, (int, float)):
             if delay < 0:
-                filehandler.warning("check_delay_file_type()", "Delay value can't be smaller than 0")
+                filehandler.warning(
+                    "check_delay_file_type()", "Delay value can't be smaller than 0"
+                )
                 return float(delay * -1)
             else:
                 return float(delay)
         elif isinstance(delay, (str)):
             filehandler.warning("check_delay_file_type()", "Delay must be float or int")
             if (delay := float(delay.strip())) < 0:
-                filehandler.warning("check_delay_file_type()", "Delay value can't be smaller than 0")
+                filehandler.warning(
+                    "check_delay_file_type()", "Delay value can't be smaller than 0"
+                )
                 return float(delay * -1)
             else:
                 return float(delay)
@@ -100,17 +109,25 @@ class Settings:
             val = page_to
             page_to = page_from
             page_from = val
-            filehandler.warning("check_values()", "pafe_from can't be bigger than page_to")
+            filehandler.warning(
+                "check_values()", "pafe_from can't be bigger than page_to"
+            )
         elif page_from == page_to:
             page_to += 1
-            filehandler.warning("check_values()", "pafe_from and page_to can't be equal")
+            filehandler.warning(
+                "check_values()", "pafe_from and page_to can't be equal"
+            )
 
         if not (page_from <= self.page_number < page_to):
             self.page_number = page_from
-            filehandler.warning("check_values()", "page number must be in range of page_from to page_to")
+            filehandler.warning(
+                "check_values()", "page number must be in range of page_from to page_to"
+            )
 
         if self.position >= len(self.clean_strings):
             self.position = 1
-            filehandler.warning("check_values()", "position can't be bigger than amount of queries")
+            filehandler.warning(
+                "check_values()", "position can't be bigger than amount of queries"
+            )
 
         return int(page_from), int(page_to)

@@ -40,3 +40,14 @@
         <td>./code_analyser.sh</td>
     </tr>
 </table>
+## Форматирвание кода
+<table>
+    <tr>
+        <td>cd ./project </td>
+    </tr>
+</table>
+ <table>
+    <tr>
+        <td>./code_formatter.sh</td>
+    </tr>
+</table>

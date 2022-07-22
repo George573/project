@@ -41,6 +41,7 @@
     </tr>
 </table>
 ## Запуск форматировщиков кода
+
 <table>
     <tr>
         <td>cd ./project </td>
